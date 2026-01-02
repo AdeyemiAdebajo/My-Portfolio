@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
 
     steps:
     - name: Checkout code
@@ -22,6 +23,14 @@ jobs:
         source: "."
         target: "/var/www/portfolio"
         debug: true   # Ensure the target directory exists and is writable
+
+    - name: Ensure target directory exists
+      uses: appleboy/ssh-action@v1.0.3    
+      with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: mkdir -p /var/www/portfolio
 
     - name: Restart Apache (optional)
       if: success()                       # Only run this step if the previous step succeeds
