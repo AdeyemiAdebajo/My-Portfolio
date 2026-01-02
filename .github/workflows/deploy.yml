@@ -19,8 +19,9 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "."                         # Ensure this is the correct source path
-        target: "/var/www/portfolio"       # Ensure the target directory exists and is writable
+        source: "."
+        target: "/var/www/portfolio"
+        debug: true   # Ensure the target directory exists and is writable
 
     - name: Restart Apache (optional)
       if: success()                       # Only run this step if the previous step succeeds
