@@ -3,7 +3,7 @@ name: Deploy to Vultr Server
 on:
   push:
     branches:
-      - main   # or master, depending on your repo
+      - main   # Trigger this workflow on pushes to the main branch
 
 jobs:
   deploy:
@@ -19,10 +19,11 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "."
-        target: "/var/www/portfolio"   # CHANGE to your site folder
+        source: "."                         # Ensure this is the correct source path
+        target: "/var/www/portfolio"       # Ensure the target directory exists and is writable
 
     - name: Restart Apache (optional)
+      if: success()                       # Only run this step if the previous step succeeds
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SERVER_IP }}
