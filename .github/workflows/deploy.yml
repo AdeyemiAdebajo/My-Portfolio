@@ -1,8 +1,9 @@
-name: Deploy to Server
+name: Deploy to Vultr Server
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main   # or master, depending on your repo
 
 jobs:
   deploy:
@@ -12,12 +13,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Deploy files via SCP
-      uses: appleboy/scp-action@v0.1.4
+    - name: Copy files to server via SSH
+      uses: appleboy/scp-action@v0.1.5
       with:
-        host: ${{ secrets.SERVER_HOST }}
+        host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_KEY }}
-        port: 22
-        source: "./*"
-        target: "/var/www/Portfolio"
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "."
+        target: "/var/www/portfolio"   # CHANGE to your site folder
+
+    - name: Restart Apache (optional)
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          sudo systemctl restart apache2
