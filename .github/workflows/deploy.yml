@@ -21,7 +21,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         source: "."
-        target: "/var/www/portfolio"
+        target: "/var/www/Portfolio"
         debug: true   # Ensure the target directory exists and is writable
 
     - name: Ensure target directory exists
@@ -30,7 +30,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: mkdir -p /var/www/portfolio
+          script: mkdir -p /var/www/Portfolio
 
     - name: Restart Apache (optional)
       if: success()                       # Only run this step if the previous step succeeds
